@@ -230,6 +230,11 @@ appelle `supabase.rpc('cancel_trip', …)`, il ne fait pas une série de `update
   toujours lister les colonnes (voir `PROFILE_FIELDS` dans AuthProvider).
 - `cancel_trip` refuse un trajet déjà annulé ou déjà parti ; `accept_plan_b`
   renvoie `null` (et marque la suggestion expirée) quand le trajet est complet.
+- Une suggestion Plan B survit à la suppression de la réservation annulée
+  (`cancelled_booking_id` nullable, migration 008). Limite connue et acceptée :
+  si un même passager perd deux conducteurs qui suppriment leur compte, ses
+  suggestions « orphelines » ne sont plus distinguables et sont toutes refusées
+  dès qu'il en accepte une. Cas rarissime, sans effet sur la démo.
 - `seats_available <= seats_total` est une contrainte SQL.
 - Un passager n'a qu'une réservation active par trajet (index unique
   partiel : une réservation annulée ne bloque pas une nouvelle réservation)
