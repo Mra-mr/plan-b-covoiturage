@@ -1,5 +1,5 @@
 import 'react-native-url-polyfill/auto';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { secureStorage } from './secureStorage';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types/database.types';
 
@@ -15,7 +15,8 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   auth: {
-    storage: AsyncStorage,
+    // Session dans le trousseau chiffré du téléphone (OWASP M9), jamais en clair.
+    storage: secureStorage,
     autoRefreshToken: true,
     persistSession: true,
     // Obligatoire en React Native : pas d'URL de callback à parser au démarrage.

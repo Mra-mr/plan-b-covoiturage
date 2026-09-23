@@ -47,7 +47,7 @@ améliorer un autre.
 | Langage | TypeScript strict | `~6.0.3` |
 | Navigation | `expo-router` (routage par fichiers) | `~57.0.22` |
 | Backend | Supabase (Postgres + Auth + RLS) | `@supabase/supabase-js ^2.116` |
-| Stockage session | `@react-native-async-storage/async-storage` | `2.2.0` (version embarquée par Expo Go SDK 57, ne pas monter en 3.x) |
+| Stockage session | `expo-secure-store` (trousseau chiffré, découpage en morceaux de 1 800 octets dans `src/lib/secureStorage.ts`) ; `@react-native-async-storage/async-storage` `2.2.0` ne sert plus qu'à migrer les anciennes sessions | — |
 | Icônes | `@expo/vector-icons` (Ionicons) | `^15.1.1` |
 | Test sur téléphone | Expo Go | — |
 
