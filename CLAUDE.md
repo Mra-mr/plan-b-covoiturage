@@ -275,7 +275,10 @@ npx supabase gen types typescript --project-id <ref> > src/types/database.types.
    `console.*` directement), on affiche une phrase compréhensible.
 9. **Pas de donnée personnelle dans les logs** (e-mail, téléphone, position).
 10. Après chaque migration, lancer les *advisors* Supabase (sécurité et
-    performance) et corriger les alertes avant de continuer. Alertes
+    performance) et corriger les alertes avant de continuer. Limite connue :
+    la protection contre les mots de passe compromis (« Leaked password
+    protection ») est réservée à l'offre payante Supabase ; compensée par une
+    longueur minimale de 8 caractères, côté app et côté serveur. Alertes
     acceptées et justifiées : les 5 fonctions `security definer` exposées aux
     utilisateurs connectés vérifient elles-mêmes l'appelant via `auth.uid()`.
 
