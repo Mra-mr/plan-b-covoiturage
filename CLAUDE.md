@@ -335,6 +335,14 @@ suggestions) ; app : recherche qui garde ses filtres et exclut les trajets
 partis, sélecteur 30/60 jours par pas de 30 min, places bornées par le
 véhicule, message de confirmation d'e-mail à l'inscription, écarts horaires
 précis, notifications cliquables, cartes annulées explicites.
+Audit OWASP Mobile Top 10 du 23/09/2026 : M9 session dans SecureStore ;
+M8 journaux muets en production (`warn()`), réglages Supabase à faire dans le
+tableau de bord (URL de site, mot de passe ≥ 8, mots de passe compromis,
+advisors) ; M6 suppression de compte (`delete_my_account`) ; M4 validations
+e-mail/nom, longueurs de saisie et contraintes en base (migration 007),
+jokers de recherche échappés ; M2 lockfile mis à jour, 13 alertes modérées
+restantes toutes dans l'outillage de build d'Expo (non embarqué dans l'app),
+corrigibles seulement par un changement de version majeure d'Expo.
 Correctifs appliqués le 22/09/2026 après test de la US-01/US-02 :
 `20260922_003_fix_accept_plan_b.sql` (cast enum dans `accept_plan_b`) et
 `20260922_004_bookings_unique_active.sql` (unicité limitée aux réservations
