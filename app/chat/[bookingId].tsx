@@ -21,6 +21,7 @@ import { refreshUnreadMessages } from '../../src/hooks/useUnreadMessages';
 import { describeLoadError, type LoadStatus } from '../../src/lib/errors';
 import { colors, radii, sizes, spacing, typography } from '../../src/theme';
 import type { MessageRow } from '../../src/types/database.types';
+import { warn } from '../../src/lib/log';
 
 const REFRESH_MS = 5000;
 
@@ -47,7 +48,7 @@ export default function ChatScreen() {
         refreshUnreadMessages();
       }
     } catch (error) {
-      console.warn('Messages indisponibles', error);
+      warn('Messages indisponibles', error);
       setErrorMessage(describeLoadError(error));
       setStatus((current) => (current === 'ready' ? 'ready' : 'error'));
       setNotice(describeLoadError(error));
@@ -71,7 +72,7 @@ export default function ChatScreen() {
       setDraft('');
       await load();
     } catch (error) {
-      console.warn('Envoi refusé', error);
+      warn('Envoi refusé', error);
       setNotice("Votre message n'a pas pu être envoyé.");
     } finally {
       setSending(false);

@@ -6,6 +6,7 @@ import { TextField } from '../../src/components/TextField';
 import { Button } from '../../src/components/Button';
 import { Logo } from '../../src/components/Logo';
 import { useAuth } from '../../src/providers/AuthProvider';
+import { isValidEmail } from '../../src/lib/format';
 import { colors, spacing, typography } from '../../src/theme';
 
 export default function SignInScreen() {
@@ -17,6 +18,14 @@ export default function SignInScreen() {
 
   async function handleSubmit() {
     setError(null);
+    if (!isValidEmail(email)) {
+      setError('Indiquez une adresse e-mail valide.');
+      return;
+    }
+    if (!password) {
+      setError('Indiquez votre mot de passe.');
+      return;
+    }
     setLoading(true);
     try {
       await signIn(email.trim(), password);

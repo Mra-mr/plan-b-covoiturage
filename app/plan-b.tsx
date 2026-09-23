@@ -19,6 +19,7 @@ import {
 import { formatDate, formatDelta, formatPrice, formatTime } from '../src/lib/format';
 import { describeBookingError, describeLoadError, type LoadStatus } from '../src/lib/errors';
 import { colors, spacing, typography } from '../src/theme';
+import { warn } from '../src/lib/log';
 
 function formatPriceDelta(cents: number): string {
   if (cents === 0) return 'même prix';
@@ -41,7 +42,7 @@ export default function PlanBScreen() {
       setSuggestions(await fetchSuggestions(user.id));
       setStatus('ready');
     } catch (error) {
-      console.warn('Alternatives indisponibles', error);
+      warn('Alternatives indisponibles', error);
       setErrorMessage(describeLoadError(error));
       setStatus('error');
     }
@@ -61,7 +62,7 @@ export default function PlanBScreen() {
         { text: 'Voir ma réservation', onPress: () => router.replace('/(tabs)/bookings') },
       ]);
     } catch (error) {
-      console.warn('Acceptation refusée', error);
+      warn('Acceptation refusée', error);
       Alert.alert('Réservation impossible', describeBookingError(error));
       await load();
     } finally {
@@ -74,7 +75,7 @@ export default function PlanBScreen() {
       await declineSuggestion(suggestion.id);
       await load();
     } catch (error) {
-      console.warn('Refus impossible', error);
+      warn('Refus impossible', error);
     }
   }
 

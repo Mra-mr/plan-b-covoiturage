@@ -9,8 +9,9 @@ import { Avatar } from '../../src/components/Avatar';
 import { Badge } from '../../src/components/Badge';
 import { TextField } from '../../src/components/TextField';
 import { useAuth } from '../../src/providers/AuthProvider';
-import { fetchNotifications, updateProfile } from '../../src/lib/queries';
+import { deleteMyAccount, fetchNotifications, updateProfile } from '../../src/lib/queries';
 import { colors, sizes, spacing, typography } from '../../src/theme';
+import { warn } from '../../src/lib/log';
 
 export default function ProfileScreen() {
   const { profile, user, signOut, refreshProfile } = useAuth();
@@ -27,7 +28,7 @@ export default function ProfileScreen() {
       const items = await fetchNotifications(user.id);
       setUnread(items.filter((n) => n.read_at === null).length);
     } catch (error) {
-      console.warn('Notifications indisponibles', error);
+      warn('Notifications indisponibles', error);
     }
   }, [user]);
 
@@ -43,6 +44,29 @@ export default function ProfileScreen() {
     setEditing(true);
   }
 
+  function askDeleteAccount() {
+    Alert.alert(
+      'Supprimer votre compte ?',
+      'Vos trajets à venir seront annulés et vos passagers prévenus. Cette action est définitive.',
+      [
+        { text: 'Retour', style: 'cancel' },
+        {
+          text: 'Supprimer mon compte',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteMyAccount();
+              await signOut();
+            } catch (error) {
+              warn('Suppression refusée', error);
+              Alert.alert('Suppression impossible', 'Votre compte n’a pas pu être supprimé. Réessayez dans un instant.');
+            }
+          },
+        },
+      ],
+    );
+  }
+
   async function save() {
     if (!user) return;
     setSaving(true);
@@ -51,7 +75,7 @@ export default function ProfileScreen() {
       await refreshProfile();
       setEditing(false);
     } catch (error) {
-      console.warn('Enregistrement refusé', error);
+      warn('Enregistrement refusé', error);
       Alert.alert('Enregistrement impossible', 'Vos modifications n’ont pas été prises en compte.');
     } finally {
       setSaving(false);
@@ -79,8 +103,8 @@ export default function ProfileScreen() {
 
           {editing ? (
             <View style={styles.form}>
-              <TextField label="Prénom et nom" value={fullName} onChangeText={setFullName} />
-              <TextField label="Quelques mots sur vous" value={bio} onChangeText={setBio} multiline />
+              <TextField label="Prénom et nom" value={fullName} onChangeText={setFullName} maxLength={80} />
+              <TextField label="Quelques mots sur vous" value={bio} onChangeText={setBio} multiline maxLength={500} />
               <Button label="Enregistrer" onPress={save} loading={saving} />
               <Button label="Annuler" variant="ghost" onPress={() => setEditing(false)} />
             </View>
@@ -98,6 +122,7 @@ export default function ProfileScreen() {
         <Row icon="car-sport-outline" label="Mes véhicules" onPress={() => router.push('/vehicles')} />
 
         <Button label="Se déconnecter" variant="secondary" onPress={() => void signOut()} />
+        <Button label="Supprimer mon compte" variant="ghost" onPress={askDeleteAccount} />
       </ScrollView>
     </Screen>
   );

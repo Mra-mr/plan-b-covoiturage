@@ -11,6 +11,7 @@ import { useAuth } from '../../src/providers/AuthProvider';
 import { fetchVehicles, publishTrip } from '../../src/lib/queries';
 import { colors, radii, sizes, spacing, typography } from '../../src/theme';
 import type { VehicleRow } from '../../src/types/database.types';
+import { warn } from '../../src/lib/log';
 
 export default function PublishScreen() {
   const { user } = useAuth();
@@ -41,7 +42,7 @@ export default function PublishScreen() {
     try {
       setVehicles(await fetchVehicles(user.id));
     } catch (e) {
-      console.warn('Véhicules indisponibles', e);
+      warn('Véhicules indisponibles', e);
     }
   }, [user]);
 
@@ -55,7 +56,7 @@ export default function PublishScreen() {
     if (!user) return;
     setError(null);
 
-    if (!origin.trim() || !destination.trim()) {
+    if (origin.trim().length < 2 || destination.trim().length < 2) {
       setError('Indiquez la ville de départ et la ville d’arrivée.');
       return;
     }
@@ -93,7 +94,7 @@ export default function PublishScreen() {
         { text: 'Voir mes trajets', onPress: () => router.push('/(tabs)/bookings') },
       ]);
     } catch (e) {
-      console.warn('Publication refusée', e);
+      warn('Publication refusée', e);
       Alert.alert('Publication impossible', "Le trajet n'a pas pu être enregistré.");
     } finally {
       setLoading(false);
@@ -106,8 +107,14 @@ export default function PublishScreen() {
         <Text style={typography.h1}>Proposer un trajet</Text>
         <Text style={typography.caption}>Indiquez votre itinéraire, vos passagers vous trouveront.</Text>
 
-        <TextField label="Ville de départ" value={origin} onChangeText={setOrigin} placeholder="Nantes" />
-        <TextField label="Ville d'arrivée" value={destination} onChangeText={setDestination} placeholder="Paris" />
+        <TextField label="Ville de départ" value={origin} onChangeText={setOrigin} placeholder="Nantes" maxLength={80} />
+        <TextField
+          label="Ville d'arrivée"
+          value={destination}
+          onChangeText={setDestination}
+          placeholder="Paris"
+          maxLength={80}
+        />
 
         <DateTimeField label="Départ" value={departure} onChange={setDeparture} withTime days={60} />
 
@@ -130,7 +137,9 @@ export default function PublishScreen() {
           onChangeText={setNotes}
           placeholder="Un arrêt café à mi-parcours."
           multiline
+          maxLength={500}
         />
+        <Text style={typography.caption}>Ces précisions sont visibles par tous les utilisateurs connectés.</Text>
 
         <View style={styles.vehicleBlock}>
           <Text style={styles.label}>Véhicule</Text>

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import type { ProfileRow } from '../types/database.types';
+import { warn } from '../lib/log';
 
 /** Profil tel que lu par l'app : le téléphone n'est jamais exposé via l'API. */
 export type ProfileSummary = Omit<ProfileRow, 'phone'>;
@@ -53,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function loadProfile(id: string) {
     const { data, error } = await supabase.from('profiles').select(PROFILE_FIELDS).eq('id', id).single();
     if (error) {
-      console.warn('Profil introuvable', error.message);
+      warn('Profil introuvable', error.message);
       return;
     }
     setProfile(data as ProfileSummary);

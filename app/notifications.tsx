@@ -11,6 +11,7 @@ import { fetchNotifications, markNotificationsRead } from '../src/lib/queries';
 import { describeLoadError, type LoadStatus } from '../src/lib/errors';
 import { colors, radii, spacing, typography } from '../src/theme';
 import type { NotificationRow } from '../src/types/database.types';
+import { warn } from '../src/lib/log';
 
 /** Lit un identifiant dans les données JSON d'une notification. */
 function readId(data: NotificationRow['data'], key: string): string | null {
@@ -37,7 +38,7 @@ export default function NotificationsScreen() {
       setStatus('ready');
       if (notifications.some((n) => n.read_at === null)) await markNotificationsRead(user.id);
     } catch (error) {
-      console.warn('Notifications indisponibles', error);
+      warn('Notifications indisponibles', error);
       setErrorMessage(describeLoadError(error));
       setStatus('error');
     }

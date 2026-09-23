@@ -10,6 +10,7 @@ import { useAuth } from '../../src/providers/AuthProvider';
 import { fetchConversations, type Conversation } from '../../src/lib/messages';
 import { describeLoadError, type LoadStatus } from '../../src/lib/errors';
 import { sizes, spacing, typography } from '../../src/theme';
+import { warn } from '../../src/lib/log';
 
 export default function MessagesScreen() {
   const { user } = useAuth();
@@ -25,7 +26,7 @@ export default function MessagesScreen() {
       setConversations(await fetchConversations(user.id));
       setStatus('ready');
     } catch (error) {
-      console.warn('Messagerie indisponible', error);
+      warn('Messagerie indisponible', error);
       setErrorMessage(describeLoadError(error));
       setStatus('error');
     }

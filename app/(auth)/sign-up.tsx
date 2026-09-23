@@ -6,6 +6,7 @@ import { TextField } from '../../src/components/TextField';
 import { Button } from '../../src/components/Button';
 import { Logo } from '../../src/components/Logo';
 import { useAuth } from '../../src/providers/AuthProvider';
+import { isValidEmail } from '../../src/lib/format';
 import { colors, spacing, typography } from '../../src/theme';
 
 export default function SignUpScreen() {
@@ -20,6 +21,14 @@ export default function SignUpScreen() {
   async function handleSubmit() {
     setError(null);
     setInfo(null);
+    if (fullName.trim().length < 2) {
+      setError('Indiquez votre prénom et votre nom.');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setError('Indiquez une adresse e-mail valide.');
+      return;
+    }
     if (password.length < 8) {
       setError('Le mot de passe doit contenir au moins 8 caractères.');
       return;
@@ -53,7 +62,13 @@ export default function SignUpScreen() {
         </View>
 
         <View style={styles.form}>
-          <TextField label="Prénom et nom" value={fullName} onChangeText={setFullName} placeholder="Thomas Martin" />
+          <TextField
+            label="Prénom et nom"
+            value={fullName}
+            onChangeText={setFullName}
+            placeholder="Thomas Martin"
+            maxLength={80}
+          />
           <TextField
             label="E-mail"
             value={email}

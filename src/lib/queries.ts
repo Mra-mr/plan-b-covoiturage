@@ -28,6 +28,11 @@ export type SearchFilters = {
   seats?: number;
 };
 
+/** Neutralise les jokers d'un motif ILIKE saisi par l'utilisateur. */
+function escapeLike(value: string): string {
+  return value.replace(/[\\%_]/g, (char) => `\\${char}`);
+}
+
 export async function searchTrips(filters: SearchFilters): Promise<TripWithDriver[]> {
   let query = supabase
     .from('trips')
@@ -48,9 +53,9 @@ export async function searchTrips(filters: SearchFilters): Promise<TripWithDrive
     query = query.gte('departure_at', new Date().toISOString());
   }
 
-  if (filters.origin?.trim()) query = query.ilike('origin_label', `%${filters.origin.trim()}%`);
+  if (filters.origin?.trim()) query = query.ilike('origin_label', `%${escapeLike(filters.origin.trim())}%`);
   if (filters.destination?.trim()) {
-    query = query.ilike('destination_label', `%${filters.destination.trim()}%`);
+    query = query.ilike('destination_label', `%${escapeLike(filters.destination.trim())}%`);
   }
 
   const { data, error } = await query;
@@ -234,6 +239,12 @@ export async function addVehicle(driverId: string, brand: string, model: string,
 
 export async function deleteVehicle(vehicleId: string) {
   const { error } = await supabase.from('vehicles').delete().eq('id', vehicleId);
+  if (error) throw error;
+}
+
+/** Supprime définitivement le compte de l'utilisateur connecté (OWASP M6). */
+export async function deleteMyAccount() {
+  const { error } = await supabase.rpc('delete_my_account');
   if (error) throw error;
 }
 

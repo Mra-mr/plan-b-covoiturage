@@ -14,6 +14,7 @@ import { useAuth } from '../../src/providers/AuthProvider';
 import { formatDate, formatPrice, formatTime } from '../../src/lib/format';
 import { describeBookingError, describeLoadError } from '../../src/lib/errors';
 import { spacing, typography } from '../../src/theme';
+import { warn } from '../../src/lib/log';
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -32,7 +33,7 @@ export default function TripDetailScreen() {
     try {
       setTrip(await fetchTrip(id));
     } catch (error) {
-      console.warn('Trajet introuvable', error);
+      warn('Trajet introuvable', error);
       setLoadError(describeLoadError(error));
     } finally {
       setLoading(false);
@@ -56,7 +57,7 @@ export default function TripDetailScreen() {
         [{ text: 'Voir ma réservation', onPress: () => router.replace('/(tabs)/bookings') }],
       );
     } catch (error) {
-      console.warn('Réservation refusée', error);
+      warn('Réservation refusée', error);
       Alert.alert('Réservation impossible', describeBookingError(error));
     } finally {
       setBooking(false);

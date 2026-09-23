@@ -264,7 +264,8 @@ npx supabase gen types typescript --project-id <ref> > src/types/database.types.
    d'acceptation du Jour 1 est : deux comptes créés, chacun ne voit que ses
    propres réservations.
 8. **Aucun message d'erreur technique affiché à l'utilisateur.** On journalise
-   avec `console.warn`, on affiche une phrase compréhensible.
+   avec `warn()` de `src/lib/log.ts` (muet en version publiée, jamais
+   `console.*` directement), on affiche une phrase compréhensible.
 9. **Pas de donnée personnelle dans les logs** (e-mail, téléphone, position).
 10. Après chaque migration, lancer les *advisors* Supabase (sécurité et
     performance) et corriger les alertes avant de continuer.

@@ -1,4 +1,9 @@
-/** Helpers d'affichage — jamais de formatage ad hoc dans les écrans. */
+/** Helpers d'affichage et de validation — jamais de formatage ad hoc dans les écrans. */
+
+/** Vérification simple d'une adresse e-mail : quelque chose @ domaine . extension. */
+export function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim());
+}
 
 export function formatPrice(cents: number): string {
   return new Intl.NumberFormat('fr-FR', {

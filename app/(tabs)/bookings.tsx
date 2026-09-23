@@ -24,6 +24,7 @@ import {
 import { describeCancelError, describeLoadError, type LoadStatus } from '../../src/lib/errors';
 import { sizes, spacing, typography } from '../../src/theme';
 import type { TripRow } from '../../src/types/database.types';
+import { warn } from '../../src/lib/log';
 
 const CANCEL_REASONS = ['Imprévu personnel', 'Véhicule indisponible', 'Trajet reporté'];
 
@@ -75,7 +76,7 @@ export default function BookingsScreen() {
       setPendingSuggestions(suggestions.length);
       setStatus('ready');
     } catch (error) {
-      console.warn('Chargement impossible', error);
+      warn('Chargement impossible', error);
       setErrorMessage(describeLoadError(error));
       setStatus('error');
     }
@@ -101,7 +102,7 @@ export default function BookingsScreen() {
       await load();
       Alert.alert('Trajet annulé', 'Vos passagers ont été prévenus et reçoivent des alternatives.');
     } catch (error) {
-      console.warn('Annulation refusée', error);
+      warn('Annulation refusée', error);
       Alert.alert('Annulation impossible', describeCancelError(error));
     } finally {
       setBusy(false);
@@ -120,7 +121,7 @@ export default function BookingsScreen() {
             await cancelMyBooking(booking.id);
             await load();
           } catch (error) {
-            console.warn('Annulation refusée', error);
+            warn('Annulation refusée', error);
           } finally {
             setBusy(false);
           }

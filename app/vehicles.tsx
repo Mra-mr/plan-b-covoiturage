@@ -14,6 +14,7 @@ import { addVehicle, deleteVehicle, fetchVehicles } from '../src/lib/queries';
 import { describeLoadError, type LoadStatus } from '../src/lib/errors';
 import { spacing, typography } from '../src/theme';
 import type { VehicleRow } from '../src/types/database.types';
+import { warn } from '../src/lib/log';
 
 export default function VehiclesScreen() {
   const { user } = useAuth();
@@ -33,7 +34,7 @@ export default function VehiclesScreen() {
       setVehicles(await fetchVehicles(user.id));
       setStatus('ready');
     } catch (error) {
-      console.warn('Véhicules indisponibles', error);
+      warn('Véhicules indisponibles', error);
       setErrorMessage(describeLoadError(error));
       setStatus('error');
     }
@@ -59,7 +60,7 @@ export default function VehiclesScreen() {
       setColor('');
       await load();
     } catch (error) {
-      console.warn('Ajout refusé', error);
+      warn('Ajout refusé', error);
       Alert.alert('Ajout impossible', "Le véhicule n'a pas pu être enregistré.");
     } finally {
       setLoading(false);
@@ -77,7 +78,7 @@ export default function VehiclesScreen() {
             await deleteVehicle(vehicle.id);
             await load();
           } catch (error) {
-            console.warn('Suppression refusée', error);
+            warn('Suppression refusée', error);
           }
         },
       },
@@ -112,9 +113,9 @@ export default function VehiclesScreen() {
 
         <View style={styles.form}>
           <Text style={typography.h3}>Ajouter un véhicule</Text>
-          <TextField label="Marque" value={brand} onChangeText={setBrand} placeholder="Renault" />
-          <TextField label="Modèle" value={model} onChangeText={setModel} placeholder="Clio" />
-          <TextField label="Couleur (facultatif)" value={color} onChangeText={setColor} placeholder="Gris" />
+          <TextField label="Marque" value={brand} onChangeText={setBrand} placeholder="Renault" maxLength={40} />
+          <TextField label="Modèle" value={model} onChangeText={setModel} placeholder="Clio" maxLength={40} />
+          <TextField label="Couleur (facultatif)" value={color} onChangeText={setColor} placeholder="Gris" maxLength={30} />
           <Stepper label="Places (conducteur compris)" value={seats} onChange={setSeats} min={2} max={8} />
           <Button label="Ajouter" onPress={handleAdd} loading={loading} />
         </View>

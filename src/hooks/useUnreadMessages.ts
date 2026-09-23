@@ -3,6 +3,7 @@ import { AppState } from 'react-native';
 import { useSegments } from 'expo-router';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchUnreadMessagesCount } from '../lib/messages';
+import { warn } from '../lib/log';
 
 const REFRESH_MS = 15000;
 
@@ -32,7 +33,7 @@ export function useUnreadMessages(): number {
     try {
       setUnread(await fetchUnreadMessagesCount(userId));
     } catch (error) {
-      console.warn('Compteur de messages indisponible', error);
+      warn('Compteur de messages indisponible', error);
     }
   }, [userId]);
 

@@ -14,6 +14,7 @@ import { Logo } from '../../src/components/Logo';
 import { searchTrips, type TripWithDriver } from '../../src/lib/queries';
 import { describeLoadError, type LoadStatus } from '../../src/lib/errors';
 import { sizes, spacing, typography } from '../../src/theme';
+import { warn } from '../../src/lib/log';
 
 export default function SearchScreen() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function SearchScreen() {
       setTrips(await searchTrips({ origin, destination, date, seats }));
       setStatus('ready');
     } catch (error) {
-      console.warn('Recherche impossible', error);
+      warn('Recherche impossible', error);
       setErrorMessage(describeLoadError(error));
       setStatus('error');
     } finally {

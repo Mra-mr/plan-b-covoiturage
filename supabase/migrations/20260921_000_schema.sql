@@ -7,6 +7,8 @@ create type public.trip_status as enum ('scheduled', 'cancelled', 'completed');
 create type public.booking_status as enum ('pending', 'confirmed', 'cancelled_by_passenger', 'cancelled_by_driver', 'completed');
 create type public.plan_b_status as enum ('proposed', 'accepted', 'declined', 'expired');
 
+-- Longueurs maximales des textes et suppression de compte :
+-- voir 20260923_007_account_deletion_and_limits.sql.
 -- ---------- profils -------------------------------------------------
 create table public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,

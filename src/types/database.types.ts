@@ -183,6 +183,8 @@ export type Database = {
       cancel_trip: { Args: { p_trip_id: string; p_reason?: string }; Returns: number };
       accept_plan_b: { Args: { p_suggestion_id: string }; Returns: string };
       is_booking_participant: { Args: { p_booking_id: string }; Returns: boolean };
+      is_trip_passenger: { Args: { p_trip_id: string }; Returns: boolean };
+      delete_my_account: { Args: Record<string, never>; Returns: undefined };
     };
     Enums: {
       trip_status: TripStatus;
