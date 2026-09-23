@@ -77,7 +77,7 @@ export type BookingRow = {
 export type PlanBSuggestionRow = {
   id: string;
   passenger_id: string;
-  cancelled_booking_id: string;
+  cancelled_booking_id: string | null;
   suggested_trip_id: string;
   score: number;
   reason: string | null;
@@ -157,7 +157,7 @@ export type Database = {
       >;
       plan_b_suggestions: Table<
         PlanBSuggestionRow,
-        'passenger_id' | 'cancelled_booking_id' | 'suggested_trip_id',
+        'passenger_id' | 'suggested_trip_id',
         [
           Rel<'plan_b_suggestions_suggested_trip_id_fkey', 'suggested_trip_id', 'trips'>,
           Rel<'plan_b_suggestions_cancelled_booking_id_fkey', 'cancelled_booking_id', 'bookings'>,

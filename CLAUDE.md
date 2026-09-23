@@ -192,6 +192,7 @@ Sept tables dans le schéma `public`. Le SQL complet est dans
 | `plan_b_suggestions` | ⭐ Alternatives générées après annulation |
 | `notifications` | Notifications in-app |
 | `messages` | Messagerie — un fil par réservation, entre passager et conducteur |
+| `avis` | **Hors migrations de ce dépôt** (créée directement dans le projet Supabase). Non utilisée par l'app ; ses clés étrangères vers profiles/trips sont en cascade depuis la migration 008 |
 
 ### Deux fonctions RPC portent la logique sensible
 
