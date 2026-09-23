@@ -32,7 +32,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {}
-    }
+      "router": {},
+      "eas": {
+        "projectId": "ab4e4f56-e1d0-44e0-abdc-1f5444b4e55f"
+      }
+    },
+    "owner": "maroi"
   }
 }
