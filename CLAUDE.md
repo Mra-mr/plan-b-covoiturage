@@ -192,6 +192,7 @@ Sept tables dans le schéma `public`. Le SQL complet est dans
 | `plan_b_suggestions` | ⭐ Alternatives générées après annulation |
 | `notifications` | Notifications in-app |
 | `messages` | Messagerie — un fil par réservation, entre passager et conducteur |
+| `driver_public_profiles` (vue) | **Hors migrations de ce dépôt**, non utilisée par l'app. Passée en `security_invoker` après l'advisor Sécurité du 23/09 |
 | `avis` | **Hors migrations de ce dépôt** (créée directement dans le projet Supabase). Non utilisée par l'app ; ses clés étrangères vers profiles/trips sont en cascade depuis la migration 008 |
 
 ### Deux fonctions RPC portent la logique sensible
@@ -274,7 +275,9 @@ npx supabase gen types typescript --project-id <ref> > src/types/database.types.
    `console.*` directement), on affiche une phrase compréhensible.
 9. **Pas de donnée personnelle dans les logs** (e-mail, téléphone, position).
 10. Après chaque migration, lancer les *advisors* Supabase (sécurité et
-    performance) et corriger les alertes avant de continuer.
+    performance) et corriger les alertes avant de continuer. Alertes
+    acceptées et justifiées : les 5 fonctions `security definer` exposées aux
+    utilisateurs connectés vérifient elles-mêmes l'appelant via `auth.uid()`.
 
 ---
 
