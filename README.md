@@ -63,6 +63,21 @@ générés par `npm run start`. Lancez-le une fois avant `npm run typecheck`.
 4. Appuyez sur « Réserver ce trajet » : la nouvelle réservation est créée et
    Karim reçoit une notification.
 
+## Version Android installable (.apk)
+
+Compilée par EAS Build (profil `preview`), compte Expo `maroi`. Lien de la
+compilation du 24/09/2026 : https://expo.dev/accounts/maroi/projects/plan-b-covoiturage/builds/3bb3d084-1817-4d12-bb41-08eab7be093b
+(bouton Download). Pour en produire une nouvelle :
+
+```bash
+eas build --platform android --profile preview
+```
+
+Sur le téléphone Android : ouvrir le lien, télécharger, autoriser
+l'installation depuis cette source, installer. L'app se connecte à la même
+base Supabase que la version de développement. iPhone : Expo Go uniquement,
+faute de compte développeur Apple.
+
 ## Le fichier CLAUDE.md
 
 `CLAUDE.md` est la source de vérité du projet (stack, structure, design
